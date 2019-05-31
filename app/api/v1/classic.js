@@ -1,6 +1,7 @@
 const Router = require('koa-router')
 const { Flow } = require('../../models/flow')
 const { Art } = require('../../models/art')
+const { Favor } = require('../../models/favor')
 const router = new Router({
     prefix: '/v1/classic'
 })
@@ -17,7 +18,9 @@ router.get('/latest', new Auth(1).m, async (ctx, next) => { // new Auth().m ä¸­é
         ]
     })
     const art = await Art.getData(flow.art_id, flow.type)
+    const like = await Favor.userLikeIt(flow.art_id, flow.type, ctx.auth.uid)
     art.setDataValue('index', flow.index)
+    art.setDataValue('is_love', like)
     ctx.body = art
 })
 module.exports = router

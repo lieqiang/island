@@ -75,7 +75,7 @@ class TokenValidator extends LinValidator {
                 max: 128
             })
         ]
-        this.validateType = checkType()
+        this.validateType = checkType
     }
     
     // checkType(vals){
@@ -100,7 +100,7 @@ class NotEmptyValidator extends LinValidator {
 class likeValidator extends PositiveIntegerValidator {
     constructor() {
         super()
-        this.validateType = checkType()
+        this.validateType = checkType
     }
 }
 
