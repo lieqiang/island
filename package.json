@@ -1,7 +1,7 @@
 {
   "name": "island",
   "version": "1.0.0",
-  "description": "7七月的微信公众号：林间有风",
+  "description": "island",
   "main": "app.js",
   "dependencies": {
     "axios": "^0.18.0",

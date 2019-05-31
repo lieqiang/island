@@ -17,7 +17,7 @@ class Movie extends Model {
 
 }
 
-Movie.init(classicFields, {
+Movie.init(classicFields, { // 定义模型
     sequelize,
     tableName: 'movie'
 })
