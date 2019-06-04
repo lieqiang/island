@@ -1,4 +1,4 @@
-const { HttpException } = require('../core/http-exception')
+const { HttpException } = require('@core/http-exception')
 const catchError = async (ctx, next) => {
     try {
         await next() // 无论下面的函数调用链有多长，都不用一个一个去处理异常，因为这里会监听

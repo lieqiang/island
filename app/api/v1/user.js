@@ -1,7 +1,7 @@
 const Router = require('koa-router')
-const { RegisterValidator } = require('../../validator/validator')
-const User = require('../../models/user')
-const { Success } = require('../../../core/http-exception')
+const { RegisterValidator } = require('@validator/validator')
+const User = require('@models/user')
+const { Success } = require('@core/http-exception')
 const router = new Router({
     prefix: '/v1/user/' // 指定注册路由url前缀
 })

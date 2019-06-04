@@ -1,13 +1,15 @@
-const {sequelize} = require('../../core/db')
+const {sequelize} = require('@core/db')
 const {
     Sequelize,
-    Model
+    Model,
+    Op
 } = require('sequelize')
-const { Art } = require('./art')
+const { Art } = require('./art') // art favor 相互引用 X getList undefind
 const {
     LikeError,
-    DislikeError
-} = require('../../core/http-exception')
+    DislikeError,
+    NotFound
+} = require('@core/http-exception')
 class Favor extends Model {
     static async like(art_id, type, uid) {
         const favor = await Favor.findOne({
@@ -25,9 +27,15 @@ class Favor extends Model {
                 art_id,
                 type,
                 uid
-            }, { transaction: t })
-            const art = await Art.getData(art_id, type)
-            await art.increment('fav_nums', { by: 1, transaction: t }) // +1
+            }, {
+                transaction: t
+            })
+            const art = await Art.getData(art_id, type, false)
+            console.log(art)
+            await art.increment('fav_nums', {
+                by: 1,
+                transaction: t
+            }) // +1
 
         })
     }
@@ -47,7 +55,7 @@ class Favor extends Model {
                 force:true,
                 transaction: t
             })
-            const art = await Art.getData(art_id, type)
+            const art = await Art.getData(art_id, type, false)
             await art.decrement('fav_nums',{ by:1, transaction:t })// -1
         })
     }
@@ -61,6 +69,22 @@ class Favor extends Model {
             }
         })
         return isLike ? true : false
+    }
+
+    static async getMyClassicFavor(uid) {
+        const all = await Favor.findAll({
+            where: {
+                uid,
+                type: {
+                    [Op.not]: 400 // 排除书籍收藏
+                }
+            }
+        })
+        if (!all) {
+            throw new NotFound()
+        }
+        console.log(all)
+        return await Art.getList(all)
     }
 }
 

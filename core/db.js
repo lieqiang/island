@@ -20,7 +20,14 @@ const sequelize = new Sequelize(dbname, user, password, {
         updatedAt:'updated_at',
         deletedAt:'deleted_at',
         underscored:true,
-        freezeTableName:true
+        freezeTableName:true,
+        scopes: {
+            bh: {
+                attributes: {
+                    excluse: ['created_at', 'updated_at', 'deleted_at'] // 全局scope
+                }
+            }
+        }
     }
 })
 sequelize.sync({

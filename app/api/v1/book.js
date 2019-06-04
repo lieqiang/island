@@ -1,8 +1,8 @@
 const Router = require('koa-router')
 const router = new Router() // 浏览器url只能发送 get请求
 // 参数传递方式
-const { HttpException, ParameterException } = require('../../../core/http-exception')
-const { PositiveIntegerValidator } = require('../../validator/validator')
+const { HttpException, ParameterException } = require('@core/http-exception')
+const { PositiveIntegerValidator } = require('@validator/validator')
 router.post('/v1/:id/book/latest', async (ctx, next) => {
     // ctx.request 获取参数 ：id url ？后面参数 ，header
     const path = ctx.params

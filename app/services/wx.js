@@ -1,9 +1,9 @@
 const axios = require('axios')
 const util = require('util') // node.js 处理url
-const User = require('../models/user')
-const { generateToken } = require('../../core/util')
-const { Auth } = require('../../middlewares/auth')
-const { AuthFailed } = require('../../core/http-exception')
+const User = require('@models/user')
+const { generateToken } = require('@core/util')
+const { Auth } = require('@middlewares/auth')
+const { AuthFailed } = require('@core/http-exception')
 
 class WXManager {
     constructor() {

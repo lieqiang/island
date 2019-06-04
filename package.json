@@ -38,6 +38,10 @@
   "devDependencies": {},
   "_moduleAliases": {
     "@root": ".",
-    "@models": "app/models"
+    "@models": "app/models",
+    "@core": "core",
+    "@lib": "app/lib",
+    "@middlewares": "middlewares",
+    "@validator": "app/validator"
   }
 }

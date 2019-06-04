@@ -1,6 +1,6 @@
 const basicAuth = require('basic-auth')
 const jwt = require('jsonwebtoken')
-const { Forbbiden } = require('../core/http-exception')
+const { Forbbiden } = require('@core/http-exception')
 class Auth {
     constructor(level) {
         this.level = level

@@ -1,5 +1,5 @@
+require('module-alias/register')
 const Koa = require('koa')
-// const Router = require('koa-router')
 const app = new Koa()
 const axios = require('axios')
 const parser = require('koa-bodyparser') // 获取body参数
