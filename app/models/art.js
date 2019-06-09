@@ -20,7 +20,7 @@ class Art {
         if (!art) {
             throw new NotFound()
         }
-        const Favor = require('@models/favor')
+        const { Favor } = require('./favor')
         const like = await Favor.userLikeIt(this.art_id, this.type, uid)
         return {
             art,
@@ -92,13 +92,13 @@ class Art {
         const scope = 'bh'
         switch (type) {
             case 100:
-                art = await Movie.scope(scope).findOne(finder)
+                art = await Movie.scope(scope).findAll(finder)
                 break
             case 200:
-                art = await Music.scope(scope).findOne(finder)
+                art = await Music.scope(scope).findAll(finder)
                 break
             case 300:
-                art = await Sentence.scope(scope).findOne(finder)
+                art = await Sentence.scope(scope).findAll(finder)
             case 400:
                 break
             default:

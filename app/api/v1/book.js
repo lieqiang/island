@@ -1,21 +1,51 @@
 const Router = require('koa-router')
-const router = new Router() // 浏览器url只能发送 get请求
-// 参数传递方式
-const { HttpException, ParameterException } = require('@core/http-exception')
-const { PositiveIntegerValidator } = require('@validator/validator')
-router.post('/v1/:id/book/latest', async (ctx, next) => {
-    // ctx.request 获取参数 ：id url ？后面参数 ，header
-    const path = ctx.params
-    const query = ctx.request.query
-    const header = ctx.request.header
-    const body = ctx.request.body
-    const a = await new PositiveIntegerValidator().validate(ctx) // await 不加的话得到的是 promise 本身
-    // if (true) {
-    //     // const error = new HttpException('参数错误', 10001, 400)
-    //     const error = new ParameterException()
-    //     throw error
-    // }
+const { HotBook } = require('@models/hot-book')
+const { Book } = require('@models/book')
+const { Favor } = require('@models/favor')
+const { PositiveIntegerValidator, SearchValidator } = require('@validator/validator')
+const { Auth } = require('@middlewares/auth')
+
+const router = new Router({
+    prefix: '/v1/book'
 })
+
+router.get('/hot_list', async (ctx, next) => {
+
+    const books = await HotBook.getAll()
+    ctx.body = {
+        books
+    }
+})
+
+router.get('/:id/detail', async ctx => {
+    const v = await new PositiveIntegerValidator().validate(ctx)
+    const book = new Book(v.get('path.id'))
+    ctx.body = await book.detail()
+})
+
+router.get('/search', async ctx => {
+    const v = await new SearchValidator().validate(ctx)
+    const result = await Book.searchFromYuShu(
+        v.get('query.q'), v.get('query.start'), v.get('query.count'))
+    ctx.body = result
+})
+// 喜欢数量
+router.get('/favor/count', new Auth().m, async ctx => {
+    const count = await Book.getMyFavorBookCount(ctx.auth.uid)
+    ctx.body = {
+        count
+    }
+})
+// 图书喜欢
+router.get('/:book_id/favor', new Auth().m, async ctx => {
+    const v =await new PositiveIntegerValidator().validate(ctx, {
+        id: 'book_id'
+    })
+    const favor = await Favor.getBookFavor(
+        ctx.auth.uid, v.get('path.book_id'))
+    ctx.body = favor
+})
+
 module.exports = router // 下面写法也行，app.js需要对应
 // module.exports = {
     // router，
