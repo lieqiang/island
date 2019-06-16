@@ -7,9 +7,9 @@ const { generateToken } = require('@core/util')
 const { Auth } = require('@middlewares/auth')
 const { WXManager } = require('../../services/wx')
 const router = new Router({
-    prefix: '/v1'
+    prefix: '/v1/token'
 })
-router.post('/token', async (ctx, next) => {
+router.post('/', async (ctx, next) => {
     const v = await new TokenValidator().validate(ctx)
     let token
     switch(v.get('body.type')) {
@@ -37,7 +37,7 @@ router.post('/verify', async (ctx) => {
     const v = await new NotEmptyValidator().validate(ctx)
     const result = Auth.verifyToken(v.get('body.token'))
     ctx.body = {
-        is_valide: result
+        isValid: result
     }
 })
 module.exports = router

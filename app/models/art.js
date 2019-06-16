@@ -10,21 +10,20 @@ const {
 } = require('lodash') // 转一维数组
 const { Op } = require('sequelize')
 class Art {
-
-    constructor(art_id, type) {
-        this.art_id = art_id
-        this.type = type
-    }
-    async getDetail(uid) {
-        const art = await Art.getData(this.art_id, this.type)
+    // constructor(art_id, type) {
+    //     this.art_id = art_id
+    //     this.type = type
+    // }
+    async getDetail(uid, art_id, type) {
+        const art = await Art.getData(art_id, type)
         if (!art) {
             throw new NotFound()
         }
-        const { Favor } = require('./favor')
-        const like = await Favor.userLikeIt(this.art_id, this.type, uid)
+        const { Favor } = require('./favor') // 循环引用
+        const like = await Favor.userLikeIt(art_id, type, uid)
         return {
             art,
-            is_love: like
+            like_status: like
         }
     }
     static async getData(art_id, type, useScope = true) {
@@ -48,7 +47,15 @@ class Art {
                 break
             case 300:
                 art = await Sentence.scope(scope).findOne(finder)
+                break
             case 400:
+                const { Book } = require('./book') // 循环引用
+                art = await Book.scope(scope).findOne(finder)
+                if(!art) {
+                    art = Book.create({
+                        id: art_id // fav_nums 有默认值
+                    })
+                }
                 break
             default:
                 break

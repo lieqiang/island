@@ -5,6 +5,7 @@ const { Favor } = require('@models/favor')
 const { PositiveIntegerValidator, SearchValidator, AddShortCommentValidator } = require('@validator/validator')
 const { Auth } = require('@middlewares/auth')
 const { Comment } = require('@models/book-comment')
+const { Success } = require('@core/http-exception')
 
 const router = new Router({
     prefix: '/v1/book'
@@ -13,15 +14,13 @@ const router = new Router({
 router.get('/hot_list', async (ctx, next) => {
 
     const books = await HotBook.getAll()
-    ctx.body = {
-        books
-    }
+    ctx.body = books
 })
 
 router.get('/:id/detail', async ctx => {
     const v = await new PositiveIntegerValidator().validate(ctx)
-    const book = new Book(v.get('path.id'))
-    ctx.body = await book.detail()
+    const book = new Book()
+    ctx.body = await book.detail(v.get('path.id'))
 })
 
 router.get('/search', async ctx => {
@@ -52,7 +51,7 @@ router.post('/add/short_comment', new Auth().m, async ctx => {
         id:'book_id'
     })
     Comment.addComment(v.get('body.book_id'),v.get('body.content'))
-    success()
+    throw new Success()
 })
 
 router.get('/:book_id/short_comment', new Auth().m, async ctx=>{

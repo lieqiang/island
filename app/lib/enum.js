@@ -15,9 +15,14 @@ const LoginType = {
 }
 
 const artType = {
-    movie: 100,
-    music: 200,
-    sentence: 300,
+    // movie: 100,
+    // music: 200,
+    // sentence: 300,
+    // BOOK:400,
+    MOVIE:100,
+    MUSIC:200,
+    SENTENCE:300,
+    BOOK:400,
     isThisType
 }
 
